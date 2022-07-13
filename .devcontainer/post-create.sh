@@ -5,7 +5,7 @@
 echo "$(date)    post-create start" >> ~/status
 
 # Install Azure Developer Cli
-curl -L https://aka.ms/InstallAzureCli | bash
+curl -fsSL https://aka.ms/install-azd.sh | bash
 
 # update the base docker images
 docker pull mcr.microsoft.com/dotnet/sdk:6.0-alpine
