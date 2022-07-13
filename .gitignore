@@ -355,3 +355,5 @@ infrastructure/terraform/.terraform/
 source/ui/.env
 source/ui/build
 source/ui/src/config.json
+
+.azure
