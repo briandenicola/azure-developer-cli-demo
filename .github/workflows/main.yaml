@@ -1,0 +1,26 @@
+name: Trigger the Creation of an Azure Container Apps Environment 
+
+on:
+  workflow_dispatch:      
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.SIMPLE_AZURE_CREDENTIALS }}
+
+      - name: Create Azure Containerapp Environment
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            cd infra
+            az group create -n ${{ secrets.CONTAINER_APP_RG }} -l eastus2
+            az deployment group create -n ${{ secrets.CONTAINER_APP_NAME }} -g ${{ secrets.CONTAINER_APP_RG }} -f ./main.bicep
