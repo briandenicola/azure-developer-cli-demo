@@ -2,6 +2,7 @@ param containerAppName string
 param location string = resourceGroup().location
 param environmentId string
 param containerImage string
+param resourceToken string 
 param containerPort int
 param isExternalIngress bool
 param env array = []
@@ -16,6 +17,10 @@ param revisionMode string = 'multiple'
 var cpu = json('0.5')
 var memory = '1Gi'
 
+resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-02-01-preview' existing = {
+  name: 'acr${resourceToken}'
+}
+
 resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
   name: containerAppName
   location: location
@@ -23,7 +28,6 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
     managedEnvironmentId: environmentId
     configuration: {
       activeRevisionsMode: revisionMode
-      registries: []
       ingress: {
         external: isExternalIngress
         targetPort: containerPort
@@ -34,6 +38,19 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
         appPort: containerPort
         appId: containerAppName
       }
+      secrets: [
+        {
+          name: 'registry-password'
+          value: containerRegistry.listCredentials().passwords[0].value
+        }
+      ]
+      registries: [
+        {
+          server: '${containerRegistry.name}.azurecr.io'
+          username: containerRegistry.name
+          passwordSecretRef: 'registry-password'
+        }
+      ]
     }
     template: {
       containers: [

@@ -1,7 +1,6 @@
 name: modern-dev-environment-demo
-
-#services:
-#  web:
-#    project: .
-#    language: py
-#    host: appservice
+services:
+  api:
+    project: src
+    language: dotnet
+    host: containerapp
