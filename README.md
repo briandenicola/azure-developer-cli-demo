@@ -5,7 +5,8 @@
 1. az login 
 1. azd init 
 1. azd up
+1. azd deploy 
 
 # Todo
-1. Create script to build and push docker image
-1. Create script to upate Container App with latest image
+- [X] Create script to build and push docker image
+- [X] Create script to upate Container App with latest image
