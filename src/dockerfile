@@ -10,5 +10,5 @@ FROM mcr.microsoft.com/dotnet/runtime-deps:6.0.5-bullseye-slim-amd64
 WORKDIR /app
 COPY --from=builder /src/publish/linux/api .
 COPY appsettings.json .
-EXPOSE 5500
+EXPOSE 5501
 ENTRYPOINT ["/app/api"]
