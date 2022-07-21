@@ -1,6 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
 name: modern-dev-environment-demo
 services:
-  api:
-    project: src
-    language: dotnet
-    host: containerapp
+    api:
+        project: src
+        language: csharp
+        docker:
+            path: src/dockerfile
+        host: containerapp

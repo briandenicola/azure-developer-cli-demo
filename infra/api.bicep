@@ -1,12 +1,11 @@
-param containerAppName string
+param name string
 param location string = resourceGroup().location
-param environmentId string
 param containerImage string
-param resourceToken string 
-param containerPort int
-param isExternalIngress bool
+param containerPort int = 5500
+param isExternalIngress bool = true 
 param env array = []
 param minReplicas int = 0
+param resourceToken string = toLower(uniqueString(subscription().id, name, location))
 
 @allowed([
   'multiple'
@@ -16,16 +15,21 @@ param revisionMode string = 'multiple'
 
 var cpu = json('0.5')
 var memory = '1Gi'
+var appName = '${name}api'
 
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-02-01-preview' existing = {
   name: 'acr${resourceToken}'
 }
 
-resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
-  name: containerAppName
+resource cae 'Microsoft.App/managedEnvironments@2022-01-01-preview' existing = {
+  name: 'env-${resourceToken}'
+}
+
+resource api 'Microsoft.App/containerApps@2022-01-01-preview' = {
+  name: appName
   location: location
   properties: {
-    managedEnvironmentId: environmentId
+    managedEnvironmentId: cae.id
     configuration: {
       activeRevisionsMode: revisionMode
       ingress: {
@@ -36,7 +40,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
       dapr: {
         enabled: true
         appPort: containerPort
-        appId: containerAppName
+        appId: appName
       }
       secrets: [
         {
@@ -56,7 +60,7 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
       containers: [
         {
           image: containerImage
-          name: containerAppName
+          name: appName
           env: env
           resources: {
              cpu: cpu
@@ -72,4 +76,4 @@ resource containerApp 'Microsoft.App/containerApps@2022-01-01-preview' = {
   }
 }
 
-output fqdn string = containerApp.properties.configuration.ingress.fqdn
+output API_URI string = 'https://${api.properties.configuration.ingress.fqdn}'

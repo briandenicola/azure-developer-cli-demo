@@ -12,19 +12,17 @@ param location string
 @description('The image name for the web service')
 param appImage string = ''
 
-param resourceToken string = '${uniqueString(deployment().name)}'
+param  resourceToken string = toLower(uniqueString(subscription().id, name, location))
 
-var appName = 'simple-app'
 var defaultAppImage = 'docker.io/bjd145/simple:97a7dd4338986d13d409c43ebb2c9571f6d5b6ed'
-var appPort = 5500
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: '${name}-rg'
   location: location
 }
 
-module resources 'resources.bicep' = {
-  name: 'resources'
+module registry 'registry.bicep' = {
+  name: 'registry'
   scope: resourceGroup
   params: {
     resourceToken: resourceToken
@@ -41,19 +39,17 @@ module environment 'environment.bicep' = {
   }
 }
 
-module appService 'container-app.bicep' = {
+module api 'api.bicep' = {
   name: appName
   scope: resourceGroup
   params: {
+    name: name
     location: location
-    containerAppName: appName
-    resourceToken: resourceToken
-    environmentId: environment.outputs.environmentId
     containerImage: appImage != '' ? appImage : defaultAppImage
-    containerPort: appPort
-    isExternalIngress: true
-    minReplicas: 0
+    resourceToken: resourceToken
   }
 }
 
-output fqdn string = appService.outputs.fqdn
+output AZURE_CONTAINER_REGISTRY_ENDPOINT string = registry.outputs.AZURE_CONTAINER_REGISTRY_ENDPOINT
+output AZURE_CONTAINER_REGISTRY_NAME string = registry.outputs.AZURE_CONTAINER_REGISTRY_NAME
+output APP_API_BASE_URL string = api.outputs.API_URI
