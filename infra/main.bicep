@@ -12,7 +12,7 @@ param location string
 @description('The image name for the web service')
 param appImage string = ''
 
-param resourceToken string = '{uniqueString(deployment().name)}'
+param resourceToken string = '${uniqueString(deployment().name)}'
 
 var appName = 'simple-app'
 var defaultAppImage = 'docker.io/bjd145/simple:97a7dd4338986d13d409c43ebb2c9571f6d5b6ed'
@@ -36,7 +36,7 @@ module environment 'environment.bicep' = {
   name: 'container-app-environment'
   scope: resourceGroup
   params: {
-    environmentName: 'env-${uniqueString(deployment().name)}'
+    environmentName: 'env-${resourceToken}'
     location: location
   }
 }
