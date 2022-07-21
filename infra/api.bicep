@@ -1,7 +1,7 @@
 param name string
 param location string = resourceGroup().location
 param containerImage string
-param containerPort int = 5500
+param containerPort int = 5501
 param isExternalIngress bool = true 
 param env array = []
 param minReplicas int = 0
