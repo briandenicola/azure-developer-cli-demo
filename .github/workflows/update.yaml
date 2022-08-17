@@ -1,17 +1,23 @@
-name: Trigger an update deployment to Container Apps
+name: Update a deployment to Azure Container Apps
 
 on:
   push:
     branches: 
-      [ master ]
+      [ main ]
     paths:
     - 'src/**'
-
+  pull_request:
+    branches: [ main ]
+    paths: 
+    - 'src/**'
   workflow_dispatch:      
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    env:
+        DOCKER_REPO: bjd145
 
     steps:
       - name: Checkout to the branch
@@ -30,7 +36,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: bjd145/simple:${{ github.sha }}
+          tags: ${{ env.DOCKER_REPO }}/simple:${{ github.sha }}
           file: src/dockerfile
           context: src
 
@@ -50,4 +56,4 @@ jobs:
         with:
           inlineScript: |
             az config set extension.use_dynamic_install=yes_without_prompt
-            az containerapp update -n ${{ secrets.CONTAINER_APP_NAME }} -g ${{ secrets.CONTAINER_APP_RG }} --image docker.io/bjd145/simple:${{ github.sha }}
+            az containerapp update -n ${{ secrets.CONTAINER_APP_NAME }} -g ${{ secrets.CONTAINER_APP_RG }} --image docker.io/${{ env.DOCKER_REPO }}/simple:${{ github.sha }}

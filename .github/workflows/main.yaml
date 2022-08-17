@@ -1,4 +1,4 @@
-name: Trigger the Creation of an Azure Container Apps Environment 
+name: Create Azure Container Apps Environment 
 
 on:
   workflow_dispatch:      
