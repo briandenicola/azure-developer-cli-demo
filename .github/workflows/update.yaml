@@ -56,4 +56,4 @@ jobs:
         with:
           inlineScript: |
             az config set extension.use_dynamic_install=yes_without_prompt
-            az containerapp update -n ${{ secrets.CONTAINER_APP_NAME }} -g ${{ secrets.CONTAINER_APP_RG }} --image docker.io/${{ env.DOCKER_REPO }}/simple:${{ github.sha }}
+            az containerapp update -n ${{ secrets.CONTAINER_APP_NAME }} -g ${{ secrets.CONTAINER_APP_RG }} --image ${{ env.DOCKER_REPO }}/simple:${{ github.sha }}
