@@ -6,5 +6,5 @@ services:
         project: src
         language: csharp
         docker:
-            path: src/dockerfile
+            path: dockerfile
         host: containerapp

@@ -14,6 +14,7 @@ param appImage string = ''
 
 param  resourceToken string = toLower(uniqueString(subscription().id, name, location))
 
+var appName = 'todo'
 var defaultAppImage = 'docker.io/bjd145/simple:97a7dd4338986d13d409c43ebb2c9571f6d5b6ed'
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
