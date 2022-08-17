@@ -10,6 +10,5 @@ curl -fsSL https://aka.ms/install-azd.sh | bash
 # update the base docker images
 docker pull mcr.microsoft.com/dotnet/sdk:6.0-alpine
 docker pull mcr.microsoft.com/dotnet/aspnet:6.0-alpine
-docker pull bjd145/utils:3.9
 
 echo "$(date)    post-create complete" >> ~/status
