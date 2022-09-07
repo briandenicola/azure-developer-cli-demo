@@ -49,6 +49,9 @@ module api 'api.bicep' = {
     containerImage: appImage != '' ? appImage : defaultAppImage
     resourceToken: resourceToken
   }
+  dependsOn: [
+    registry
+  ]
 }
 
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = registry.outputs.AZURE_CONTAINER_REGISTRY_ENDPOINT
