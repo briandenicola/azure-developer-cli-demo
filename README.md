@@ -54,9 +54,8 @@ The repo also has two Github Action workflows that would be used to promote code
 ## Redeploy and Validate 
 ``` bash
     azd deploy 
-    curl ${API_URI}/
-    curl -X POST ${API_URI}/todos/ -d '{"Id": 123456, "Name": "Take out trash"}' -H "Content-Type: application/json"
-    curl ${API_URI}/todos
+    cd scripts
+    ./validate.sh
 ```
 
 ## Pull Request
