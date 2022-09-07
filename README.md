@@ -39,12 +39,8 @@ The repo also has two Github Action workflows that would be used to promote code
 
 # Validate
 ```bash
-    export $(azd env get-values | grep -i API_URI | tr -d '\"')
-    curl ${API_URI}/
-    curl -X POST ${API_URI}/todos/ -d '{"Id": 123456, "Name": "Take out trash"}' -H "Content-Type: application/json"
-    curl -X POST ${API_URI}/todos/ -d '{"Id": 7891011, "Name": "Clean your bathroom"}' -H "Content-Type: application/json"
-    curl ${API_URI}/todos/123456
-    curl ${API_URI}/todos/
+    cd scripts
+    ./validate.sh
 ```
 
 # Update Deployment
