@@ -16,6 +16,7 @@ param  resourceToken string = toLower(uniqueString(subscription().id, name, loca
 
 var appName = 'todo'
 var defaultAppImage = 'docker.io/bjd145/simple:97a7dd4338986d13d409c43ebb2c9571f6d5b6ed'
+var sqlPassword =  'strong-Password+${resourceToken}'
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: '${name}-rg'
@@ -40,6 +41,16 @@ module environment 'environment.bicep' = {
   }
 }
 
+module sql 'postgresql.bicep' = {
+  name: 'azure-postgresql'
+  scope: resourceGroup
+  params: {
+    sqlName: 'sql-${resourceToken}'
+    location: location
+    administratorLoginPassword: sqlPassword
+  }
+}
+
 module api 'api.bicep' = {
   name: appName
   scope: resourceGroup
@@ -48,9 +59,12 @@ module api 'api.bicep' = {
     location: location
     containerImage: appImage != '' ? appImage : defaultAppImage
     resourceToken: resourceToken
+    sqlName: 'sql-${resourceToken}'
+    sqlPassword: sqlPassword
   }
   dependsOn: [
     registry
+    sql
   ]
 }
 
