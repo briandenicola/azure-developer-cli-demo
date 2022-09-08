@@ -1,5 +1,6 @@
 using Dapr.Client;
-using Microsoft.Extensions.Logging;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 var client = new DaprClientBuilder().Build();
@@ -10,11 +11,14 @@ builder.Services.AddSingleton<DaprClient>(client);
 var app = builder.Build();
 app.Urls.Add("http://+:5501");
 
+//For demo purposed only....
+var todoItems = new List<String>();
+
 app.MapGet( "/", () =>  $"Hello World! The time now is {DateTime.Now}" );
 
-//app.MapGet("/todos", async (TodoDb db) => await db.Todos.ToListAsync());
+app.MapGet("/todos", async (DaprClient dapr) => (await dapr.GetBulkStateAsync(store, todoItems, parallelism: 1)).Select( todo => JsonSerializer.Deserialize<Todo>(todo.Value) ));
 
-app.MapGet("/todos/{id}", async (string id,DaprClient dapr) =>
+app.MapGet("/todos/{id}", async (string id, DaprClient dapr) =>
 {
     var todo = await dapr.GetStateAsync<Todo>(store, id);
     
@@ -28,6 +32,9 @@ app.MapGet("/todos/{id}", async (string id,DaprClient dapr) =>
 
 app.MapPost("/todos", async (Todo todo, DaprClient dapr) =>
 {
+    if (todo is null || todo.Id is null ) return Results.NotFound();
+
+    todoItems.Add(todo.Id);
     await dapr.SaveStateAsync<Todo>(store, todo.Id, todo);
     return Results.Created($"/todos/{todo.Id}", todo);
 });
@@ -49,7 +56,12 @@ app.Run();
 
 class Todo
 {
+    [JsonPropertyName("id")]
     public string? Id { get; set; }
+    
+    [JsonPropertyName("name")]
     public string? Name { get; set; }
+
+    [JsonPropertyName("isComplete")]
     public bool IsComplete { get; set; }
 }
