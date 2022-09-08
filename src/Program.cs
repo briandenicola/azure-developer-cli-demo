@@ -3,7 +3,7 @@ using Dapr.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 var client = new DaprClientBuilder().Build();
-var store = "dapr-store";
+var store = "dapr-state";
 
 //builder.Services.AddDbContext<TodoDb>(opt => opt.UseInMemoryDatabase("TodoList"));
 builder.Services.AddSingleton<DaprClient>(client);
