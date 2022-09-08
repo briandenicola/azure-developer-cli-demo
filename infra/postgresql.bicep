@@ -25,4 +25,18 @@ resource postgresql 'Microsoft.DBforPostgreSQL/flexibleServers@2022-01-20-previe
       storageSizeGB: skuSizeGB
     }
   }
+
+  resource database 'databases@2022-01-20-preview' = {
+    name: 'todo'
+  }
+
+  resource all 'firewallRules@2022-01-20-preview' = {
+    name: 'all'
+    properties: {
+      startIpAddress: '0.0.0.0'
+      endIpAddress: '255.255.255.255'
+    }
+  }
 }
+
+
