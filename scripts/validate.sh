@@ -12,3 +12,7 @@ echo
 
 echo Get Todo ID# 123456
 curl -s ${API_URI}/todos/123456 | jq
+
+echo Update Todo# 7891011
+curl -sX PUT ${API_URI}/todos/7891011 -d '{"Id": "7891011", "Name": "Clean your bathroom", "IsComplete": true }' -H "Content-Type: application/json" 
+curl -s ${API_URI}/todos/7891011 | jq
