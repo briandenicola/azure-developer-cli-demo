@@ -10,6 +10,12 @@
       },
       "containerImage": {
         "value": "${SERVICE_API_IMAGE_NAME}"
+      },
+      "sqlName": {
+        "value": "${SQL_NAME}"
+      },
+      "sqlPassword": {
+        "value": "${SQL_PASSWORD}"
       }
     }
   }

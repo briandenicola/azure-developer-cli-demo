@@ -71,3 +71,5 @@ module api 'api.bicep' = {
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = registry.outputs.AZURE_CONTAINER_REGISTRY_ENDPOINT
 output AZURE_CONTAINER_REGISTRY_NAME string = registry.outputs.AZURE_CONTAINER_REGISTRY_NAME
 output APP_API_BASE_URL string = api.outputs.API_URI
+output SQL_NAME string = 'sql-${resourceToken}'
+output SQL_PASSWORD string = sqlPassword
