@@ -12,5 +12,5 @@ curl -sX POST ${API_URI}/todos/ -d '{"Id": 7891011, "Name": "Clean your bathroom
 echo Get Todo ID# 123456
 curl -s ${API_URI}/todos/123456 | jq
 
-echo Get All Todo Items
-curl -s ${API_URI}/todos/ | jq
+#echo Get All Todo Items
+#curl -s ${API_URI}/todos/ | jq
