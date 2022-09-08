@@ -25,6 +25,7 @@ The repo also has two Github Action workflows that would be used to promote code
 * Azure Container Registry 
 * Azure Container Environment 
 * Azure Container App
+* Azure PostgreSQL
 
 # Deploy Environment
 ``` bash
@@ -69,4 +70,4 @@ The repo also has two Github Action workflows that would be used to promote code
 # Backlog
 - [X] Create script to build and push docker image
 - [X] Create script to upate Container App with latest image
-- [ ] Migrate to Dapr/PostgreSQL from InMemory Database
+- [X] Migrate to Dapr/PostgreSQL from InMemory Database
