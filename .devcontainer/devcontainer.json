@@ -25,7 +25,9 @@
 				"ms-dotnettools.csharp",
 				"ms-azuretools.vscode-bicep",
 				"ms-azuretools.vscode-docker",
-				"ms-kubernetes-tools.vscode-kubernetes-tools"
+				"ms-azuretools.azure-dev",
+				"ms-kubernetes-tools.vscode-kubernetes-tools",
+				"github.copilot"
 			]
 		}
 	},
