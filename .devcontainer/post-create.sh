@@ -12,6 +12,7 @@ docker pull mcr.microsoft.com/dotnet/sdk:6.0-alpine
 docker pull mcr.microsoft.com/dotnet/aspnet:6.0-alpine
 
 # install psql
-apt-get -y install postgresql-client postgresql-contrib
+sudo apt-get update -qq -y
+sudo apt-get -y install postgresql-client postgresql-contrib
 
 echo "$(date)    post-create complete" >> ~/status
