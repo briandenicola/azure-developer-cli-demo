@@ -3,7 +3,13 @@
 name: modern-dev-environment-demo
 services:
     api:
-        project: src
+        project: src/api
+        language: csharp
+        docker:
+            path: dockerfile
+        host: containerapp
+    ui:
+        project: src/ui
         language: csharp
         docker:
             path: dockerfile
