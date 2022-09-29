@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export $(azd env get-values | grep -i API_URI | tr -d '\"')
+export $(azd env get-values | grep -i UI_URI | tr -d '\"')
 
 cat << EOF > ../src/ui/wwwroot/appsettings.json
 {
@@ -8,5 +9,4 @@ cat << EOF > ../src/ui/wwwroot/appsettings.json
 }
 EOF
 
-cd ..
-azd deploy ui
+azd deploy --cwd .. --service ui
