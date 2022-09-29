@@ -62,6 +62,13 @@ The repo also has two Github Action workflows that would be used to promote code
 ## Pull Request
 * At this point, a developer would commit the code upstream to their branch and create a pull request. After approved then the _Update a deployment to Azure Container Apps_ Github Action workflow will deploy the change to the upper environments. 
 
+# UI Deployment 
+``` bash
+    cd scripts
+    ./update-ui.sh
+    ./validate.sh
+```
+
 # Clean Up
 ``` bash
     azd down
