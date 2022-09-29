@@ -12,5 +12,5 @@ services:
         project: src/ui
         language: csharp
         docker:
-            path: dockerfile
+            path: Dockerfile
         host: containerapp
