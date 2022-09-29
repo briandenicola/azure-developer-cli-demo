@@ -7,6 +7,10 @@ var client = new DaprClientBuilder().Build();
 var store = "dapr-state";
 
 builder.Services.AddSingleton<DaprClient>(client);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader());
+});
 
 var app = builder.Build();
 app.Urls.Add("http://+:5501");
@@ -57,7 +61,7 @@ app.Run();
 class Todo
 {
     [JsonPropertyName("id")]
-    public string? Id { get; set; }
+    public Guid Id { get; set; }
     
     [JsonPropertyName("name")]
     public string? Name { get; set; }
