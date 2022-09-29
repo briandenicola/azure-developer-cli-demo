@@ -9,13 +9,18 @@ param name string
 @description('Primary location for all resources')
 param location string
 
-@description('The image name for the web service')
-param appImage string = ''
+@description('The image name for the Api service')
+param apiImage string = ''
+
+@description('The image name for the UI')
+param uiImage string = ''
+
 
 param  resourceToken string = toLower(uniqueString(subscription().id, name, location))
 
 var appName = 'todo'
-var defaultAppImage = 'docker.io/bjd145/simple:97a7dd4338986d13d409c43ebb2c9571f6d5b6ed'
+var defaultApiImage = 'docker.io/bjd145/simple:97a7dd4338986d13d409c43ebb2c9571f6d5b6ed'
+var defaultUiImage = 'docker.io/bjd145/simple-ui:97a7dd4338986d13d409c43ebb2c9571f6d5b6ed'
 var sqlPassword =  'strong-Password+${resourceToken}'
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -59,15 +64,30 @@ module sql 'postgresql.bicep' = {
 }
 
 module api 'api.bicep' = {
-  name: appName
+  name: '${appName}-api'
   scope: resourceGroup
   params: {
     location: location
     environmentName: name
-    containerImage: appImage != '' ? appImage : defaultAppImage
+    containerImage: apiImage != '' ? apiImage : defaultApiImage
     resourceToken: resourceToken
     sqlName: 'sql-${resourceToken}'
     sqlPassword: sqlPassword
+  }
+  dependsOn: [
+    registry
+    sql
+  ]
+}
+
+module ui 'ui.bicep' = {
+  name: '${appName}-ui'
+  scope: resourceGroup
+  params: {
+    location: location
+    environmentName: name
+    containerImage: uiImage != '' ? uiImage : defaultUiImage
+    resourceToken: resourceToken
   }
   dependsOn: [
     registry
