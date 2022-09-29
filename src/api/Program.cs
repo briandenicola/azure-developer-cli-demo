@@ -39,8 +39,8 @@ app.MapPost("/todos", async (Todo todo, DaprClient dapr) =>
     if (todo is null || todo.Id is null ) return Results.NotFound();
 
     todoItems.Add(todo.Id);
-    await dapr.SaveStateAsync<Todo>(store, todo.Id, todo);
-    return Results.Created($"/todos/{todo.Id}", todo);
+    await dapr.SaveStateAsync<Todo>(store, todo?.Id, todo);
+    return Results.Created($"/todos/{todo?.Id}", todo);
 });
 
 app.MapPut("/todos/{id}", async (string id, Todo inputTodo, DaprClient dapr) =>
@@ -61,7 +61,7 @@ app.Run();
 class Todo
 {
     [JsonPropertyName("id")]
-    public Guid Id { get; set; }
+    public string? Id { get; set; }
     
     [JsonPropertyName("name")]
     public string? Name { get; set; }
