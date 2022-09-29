@@ -1,0 +1,57 @@
+﻿@page "/"
+@using System.Net.Http
+@inject HttpClient Http
+
+<PageTitle>My Honey Do List</PageTitle>
+
+<FluentCard>
+    <h1>My Honey Do List</h1> 
+    <hr/>
+    <FluentTextField @ref=TodoInputField style="width: 100%;" Autofocus="true" Placeholder="Take out trash.." Required=true ValueChanged="@(e => todoInput = e)" />
+    <FluentButton Appearance="Appearance.Filled" @onclick="async () => await AddTodo()">Add todo</FluentButton>
+</FluentCard>
+
+<hr/>
+
+<FluentCard>
+    <div>
+        <p>Pending: <i>(@todos?.Count(todo => !todo.IsComplete))</i></p>
+    </div>
+    <ul style="list-style: none;">
+    @foreach (var todo in todos)
+    {
+        <li><FluentCheckbox Checked="@(todo.IsComplete)" @onclick="async () => await MarkComplete(todo?.Id)">@todo.Name</FluentCheckbox></li>
+    }
+    </ul>
+</FluentCard>
+
+
+@code {
+    private List<TodoItem>? todos = new();
+    private FluentTextField? TodoInputField;
+    private string? todoInput { get; set; }
+
+    private async Task AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(todoInput))
+        {
+            var todo = new TodoItem { Id = Guid.NewGuid().ToString(), Name = todoInput };
+            todos?.Add(todo);
+            await Http.PostAsJsonAsync<TodoItem>("/todos", todo);
+        }
+        TodoInputField?.FocusAsync();
+    }
+
+    private async Task MarkComplete(string id)
+    {
+        var todo = todos?.FirstOrDefault(t => t.Id == id);
+        if (todo != null)
+        {   
+            todo.IsComplete = !todo.IsComplete;
+            await Http.PutAsJsonAsync<TodoItem>($"/todos/{id}", todo);
+        }
+    }
+
+    protected override async Task OnInitializedAsync() => await GetTodos();
+    private async Task GetTodos() => todos = await Http.GetFromJsonAsync<List<TodoItem>>("/todos");
+}
