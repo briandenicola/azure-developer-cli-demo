@@ -62,7 +62,6 @@ module api 'api.bicep' = {
   name: appName
   scope: resourceGroup
   params: {
-    name: name
     location: location
     environmentName: name
     containerImage: appImage != '' ? appImage : defaultAppImage
