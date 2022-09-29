@@ -1,5 +1,6 @@
 param location string = resourceGroup().location
 param sqlName string
+param environmentName string
 param administratorLogin string = 'manager'
 @secure()
 param administratorLoginPassword string
@@ -13,6 +14,9 @@ resource postgresql 'Microsoft.DBforPostgreSQL/flexibleServers@2022-01-20-previe
   sku: {
     name: 'Standard_D2ds_v4'
     tier: 'GeneralPurpose'
+  }
+  tags: {
+    'azd-env-name': environmentName
   }
   properties: {
     version: skuVersion

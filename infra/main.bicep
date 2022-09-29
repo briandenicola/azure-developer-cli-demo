@@ -19,14 +19,18 @@ var defaultAppImage = 'docker.io/bjd145/simple:97a7dd4338986d13d409c43ebb2c9571f
 var sqlPassword =  'strong-Password+${resourceToken}'
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: '${name}-rg'
+  name: 'rg-${name}-${resourceToken}'
   location: location
+  tags: {
+    'azd-env-name': name
+  }
 }
 
 module registry 'registry.bicep' = {
   name: 'registry'
   scope: resourceGroup
   params: {
+    environmentName: name
     resourceToken: resourceToken
     location: location
   }
@@ -36,7 +40,9 @@ module environment 'environment.bicep' = {
   name: 'container-app-environment'
   scope: resourceGroup
   params: {
-    environmentName: 'env-${resourceToken}'
+    environmentName: name
+    caeName: 'env-${resourceToken}'
+    resourceToken: resourceToken
     location: location
   }
 }
@@ -45,6 +51,7 @@ module sql 'postgresql.bicep' = {
   name: 'azure-postgresql'
   scope: resourceGroup
   params: {
+    environmentName: name
     sqlName: 'sql-${resourceToken}'
     location: location
     administratorLoginPassword: sqlPassword
@@ -57,6 +64,7 @@ module api 'api.bicep' = {
   params: {
     name: name
     location: location
+    environmentName: name
     containerImage: appImage != '' ? appImage : defaultAppImage
     resourceToken: resourceToken
     sqlName: 'sql-${resourceToken}'

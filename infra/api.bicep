@@ -1,11 +1,11 @@
-param name string
+param environmentName string 
 param location string = resourceGroup().location
 param containerImage string
 param containerPort int = 5501
 param isExternalIngress bool = true 
 param env array = []
 param minReplicas int = 0
-param resourceToken string = toLower(uniqueString(subscription().id, name, location))
+param resourceToken string = toLower(uniqueString(subscription().id, environmentName, location))
 param sqlName string 
 
 @secure()
@@ -19,7 +19,7 @@ param revisionMode string = 'multiple'
 
 var cpu = json('0.5')
 var memory = '1Gi'
-var appName = '${name}api'
+var appName = '${environmentName}api'
 
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-02-01-preview' existing = {
   name: 'acr${resourceToken}'
@@ -36,6 +36,9 @@ resource sql 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' existing = {
 resource api 'Microsoft.App/containerApps@2022-01-01-preview' = {
   name: appName
   location: location
+  tags: {
+    'azd-env-name': environmentName
+  }
   properties: {
     managedEnvironmentId: cae.id
     configuration: {

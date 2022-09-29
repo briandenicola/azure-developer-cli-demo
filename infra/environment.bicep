@@ -1,11 +1,16 @@
 param environmentName string
-param logAnalyticsWorkspaceName string = 'logs-${environmentName}'
-param appInsightsName string = 'ai-${environmentName}'
+param caeName string
+param resourceToken string
+param logAnalyticsWorkspaceName string = 'logs-${resourceToken}'
+param appInsightsName string = 'ai-${resourceToken}'
 param location string = resourceGroup().location
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-03-01-preview' = {
   name: logAnalyticsWorkspaceName
   location: location
+  tags: {
+    'azd-env-name': environmentName
+  }
   properties: any({
     retentionInDays: 30
     features: {
@@ -27,8 +32,11 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
 }
 
 resource environment 'Microsoft.App/managedEnvironments@2022-01-01-preview' = {
-  name: environmentName
+  name: caeName
   location: location
+  tags: {
+    'azd-env-name': environmentName
+  }
   properties: {
     appLogsConfiguration: {
       destination: 'log-analytics'
