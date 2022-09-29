@@ -87,6 +87,7 @@ module ui 'ui.bicep' = {
     location: location
     environmentName: name
     containerImage: uiImage != '' ? uiImage : defaultUiImage
+    containerPort: 8080
     resourceToken: resourceToken
   }
   dependsOn: [
