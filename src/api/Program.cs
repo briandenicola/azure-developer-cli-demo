@@ -9,16 +9,22 @@ var store = "dapr-state";
 builder.Services.AddSingleton<DaprClient>(client);
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader());
+    options.AddDefaultPolicy( policy =>
+    {
+        policy.WithOrigins("*");
+    });
 });
 
 var app = builder.Build();
+app.UseCors();
 app.Urls.Add("http://+:5501");
 
 //For demo purposed only....
 var todoItems = new List<String>();
 
 app.MapGet( "/", () =>  $"Hello World! The time now is {DateTime.Now}" );
+
+app.MapGet( "/version", () =>  $"v1" );
 
 app.MapGet("/todos", async (DaprClient dapr) => (await dapr.GetBulkStateAsync(store, todoItems, parallelism: 1)).Select( todo => JsonSerializer.Deserialize<Todo>(todo.Value) ));
 
