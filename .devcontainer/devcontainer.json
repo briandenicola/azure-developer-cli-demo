@@ -26,7 +26,8 @@
 				"ms-azuretools.vscode-bicep",
 				"ms-azuretools.vscode-docker",
 				"ms-azuretools.azure-dev",
-				"ms-kubernetes-tools.vscode-kubernetes-tools",
+				"ms-azuretools.vscode-azurecontainerapps",
+				"ms-ossdata.vscode-postgresql",
 				"github.copilot"
 			]
 		}
