@@ -32,7 +32,7 @@ resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-
   name: managedIdentityName
 }
 
-resource api 'Microsoft.App/containerApps@2022-01-01-preview' = {
+resource api 'Microsoft.App/containerApps@2022-06-01-preview' = {
   name: appName
   location: location
   tags: {

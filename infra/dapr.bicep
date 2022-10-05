@@ -29,7 +29,7 @@ resource dapSecretStore 'Microsoft.App/managedEnvironments/daprComponents@2022-0
       }
       {
         name: 'azureClientId'
-        value: managedIdentity.id
+        value: managedIdentity.properties.clientId
       }
       {
         name: 'azureTenantId'
