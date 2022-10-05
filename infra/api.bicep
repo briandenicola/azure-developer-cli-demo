@@ -4,7 +4,7 @@ param containerImage string
 param containerPort int = 5501
 param isExternalIngress bool = true 
 param env array = []
-param minReplicas int = 0
+param minReplicas int = 1
 param resourceToken string = toLower(uniqueString(subscription().id, environmentName, location))
 param managedIdentityName string 
 
@@ -87,7 +87,7 @@ resource api 'Microsoft.App/containerApps@2022-06-01-preview' = {
       ]
       scale: {
         minReplicas: minReplicas
-        maxReplicas: 10
+        maxReplicas: minReplicas
       }
     }
   }
