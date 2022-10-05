@@ -6,10 +6,8 @@ param isExternalIngress bool = true
 param env array = []
 param minReplicas int = 0
 param resourceToken string = toLower(uniqueString(subscription().id, environmentName, location))
-param sqlName string 
+param managedIdentityName string 
 
-@secure()
-param sqlPassword string 
 
 @allowed([
   'multiple'
@@ -21,6 +19,7 @@ var cpu = json('0.5')
 var memory = '1Gi'
 var appName = '${environmentName}api'
 
+
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-02-01-preview' existing = {
   name: 'acr${resourceToken}'
 }
@@ -29,8 +28,8 @@ resource cae 'Microsoft.App/managedEnvironments@2022-01-01-preview' existing = {
   name: 'env-${resourceToken}'
 }
 
-resource sql 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' existing = {
-  name: sqlName
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' existing = {
+  name: managedIdentityName
 }
 
 resource api 'Microsoft.App/containerApps@2022-01-01-preview' = {
@@ -38,6 +37,12 @@ resource api 'Microsoft.App/containerApps@2022-01-01-preview' = {
   location: location
   tags: {
     'azd-env-name': environmentName
+  }
+  identity: {
+    type: 'UserAssigned'
+    userAssignedIdentities: {
+      '${managedIdentity.id}' : {}
+    }    
   }
   properties: {
     managedEnvironmentId: cae.id
@@ -85,33 +90,6 @@ resource api 'Microsoft.App/containerApps@2022-01-01-preview' = {
         maxReplicas: 10
       }
     }
-  }
-}
-
-resource daprComponent 'Microsoft.App/managedEnvironments/daprComponents@2022-03-01' = {
-  name: 'env-${resourceToken}/dapr-state'
-  properties: {
-    componentType: 'state.postgresql'
-    version: 'v1'
-    secrets: [
-      {
-        name: 'postgresql-connectionstring'
-        value: 'host=${sql.properties.fullyQualifiedDomainName} user=${sql.properties.administratorLogin} password=${sqlPassword} port=5432 dbname=todo sslmode=require' 
-      }
-    ]
-    metadata: [
-      {
-        name: 'connectionString'
-        secretRef: 'postgresql-connectionstring'
-      }
-      {
-        name: 'actorStateStore'
-        value: 'false'
-      }
-    ]
-    scopes: [
-      appName
-    ]
   }
 }
 

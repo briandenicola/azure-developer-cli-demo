@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 var client = new DaprClientBuilder().Build();
-var store = "dapr-state";
+var store = "statestore";
 
 builder.Services.AddSingleton<DaprClient>(client);
 builder.Services.AddCors(options =>
