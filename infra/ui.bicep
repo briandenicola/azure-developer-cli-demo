@@ -21,11 +21,11 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-02-01-pr
   name: 'acr${resourceToken}'
 }
 
-resource cae 'Microsoft.App/managedEnvironments@2022-01-01-preview' existing = {
+resource cae 'Microsoft.App/managedEnvironments@2022-03-01' existing = {
   name: 'env-${resourceToken}'
 }
 
-resource ui 'Microsoft.App/containerApps@2022-01-01-preview' = {
+resource ui 'Microsoft.App/containerApps@2022-03-01' = {
   name: appName
   location: location
   tags: {

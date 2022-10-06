@@ -101,6 +101,7 @@ module api 'api.bicep' = {
     managedIdentityName: managedIdentityName
   }
   dependsOn: [
+    environment
     registry
     keyvault
   ]
@@ -133,6 +134,7 @@ module ui 'ui.bicep' = {
     resourceToken: resourceToken
   }
   dependsOn: [
+    environment
     registry
     sql
   ]

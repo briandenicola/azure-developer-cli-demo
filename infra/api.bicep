@@ -19,12 +19,11 @@ var cpu = json('0.5')
 var memory = '1Gi'
 var appName = '${environmentName}api'
 
-
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-02-01-preview' existing = {
   name: 'acr${resourceToken}'
 }
 
-resource cae 'Microsoft.App/managedEnvironments@2022-01-01-preview' existing = {
+resource cae 'Microsoft.App/managedEnvironments@2022-03-01' existing = {
   name: 'env-${resourceToken}'
 }
 
@@ -32,7 +31,7 @@ resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-
   name: managedIdentityName
 }
 
-resource api 'Microsoft.App/containerApps@2022-06-01-preview' = {
+resource api 'Microsoft.App/containerApps@2022-03-01' = {
   name: appName
   location: location
   tags: {
