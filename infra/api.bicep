@@ -36,6 +36,7 @@ resource api 'Microsoft.App/containerApps@2022-03-01' = {
   location: location
   tags: {
     'azd-env-name': environmentName
+    'azd-service-name': 'api'
   }
   identity: {
     type: 'UserAssigned'

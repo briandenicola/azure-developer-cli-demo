@@ -30,6 +30,7 @@ resource ui 'Microsoft.App/containerApps@2022-03-01' = {
   location: location
   tags: {
     'azd-env-name': environmentName
+    'azd-service-name': 'ui'
   }
   properties: {
     managedEnvironmentId: cae.id
