@@ -30,12 +30,13 @@ The repo also has two Github Action workflows that would be used to promote code
 # Deploy Environment
 ``` bash
     git checkout -b branch/feature1
-    az login 
+    azd login --tenant-id $ARM_TENANT_ID --client-id $ARM_CLIENT_ID --client-secret $ARM_CLIENT_SECRET
     azd init 
         - Environment Name: dev
         - Azure Location: (US) Southcentral US
         - Azure Subscription: <ENTER> 
     azd up
+    ./scripts/update-ui.sh
 ```
 
 # Validate
