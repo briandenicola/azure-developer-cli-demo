@@ -143,6 +143,7 @@ module ui 'ui.bicep' = {
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = registry.outputs.AZURE_CONTAINER_REGISTRY_ENDPOINT
 output AZURE_CONTAINER_REGISTRY_NAME string = registry.outputs.AZURE_CONTAINER_REGISTRY_NAME
 output APP_API_BASE_URL string = api.outputs.API_URI
+output APP_UI_BASE_URL string = ui.outputs.UI_URI
 output SQL_NAME string = 'sql-${resourceToken}'
 output MANAGED_IDENTITY_NAME string = managedIdentityName
 output SQL_PASSWORD string = sqlPassword

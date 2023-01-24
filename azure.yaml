@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/e285f1230dea6e4dc7806298e7916e0c73157701/schemas/v1.0/azure.yaml.json
 
 name: modern-dev-environment-demo
 services:
@@ -14,3 +14,10 @@ services:
         docker:
             path: Dockerfile
         host: containerapp
+hooks:
+    postprovision:
+        run: ./scripts/update-ui.sh
+        interactive: true
+    postdeploy:
+        run: ./scripts/validate.sh
+        interactive: true
