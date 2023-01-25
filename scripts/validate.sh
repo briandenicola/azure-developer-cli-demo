@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export $(azd env get-values | grep -i APP_API_BASE_URL | tr -d '\"')
-
 echo Health Check
 curl -w '\n' ${APP_API_BASE_URL}/
 
