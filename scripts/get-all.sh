@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export $(azd env get-values | grep -i API_URI | tr -d '\"')
+export $(azd env get-values | grep -i APP_API_BASE_URL | tr -d '\"')
 
 echo Get All
-curl -s ${API_URI}/todos | jq
+curl -s ${APP_API_BASE_URL}/todos | jq
